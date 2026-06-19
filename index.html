@@ -150,7 +150,7 @@
         <!-- View: Home -->
         <div id="view-home" class="view-section active">
             <div class="relative bg-dark text-white rounded-3xl mx-4 lg:mx-8 overflow-hidden mb-12 fade-in-up shadow-2xl h-[60vh] md:h-[70vh]" style="animation-delay: 0.5s;">
-                <img id="hero-bg-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Fashion Cover" class="absolute inset-0 w-full h-full object-cover">
+                <img id="hero-bg-img" src="https://6a355620495f432db76d9f00.imgix.net/Model_wearing_ivory_blouse_cream%E2%80%A6_202606191956.jpeg?w=896&h=1200" alt="Fashion Cover" class="absolute inset-0 w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/40 pointer-events-none"></div>
                 <div class="relative h-full px-6 py-12 flex flex-col items-center justify-between text-center">
                     <h2 class="text-6xl md:text-8xl font-black text-white font-en tracking-[0.2em] drop-shadow-2xl mt-8">TOPIC</h2>
@@ -510,7 +510,7 @@
                     SHIPPING_FEE = docSnap.data().shippingFee ?? 80;
                     
                     // Update Hero Image dynamically
-                    const heroUrl = docSnap.data().heroImage || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+                    const heroUrl = docSnap.data().heroImage || "https://6a355620495f432db76d9f00.imgix.net/Model_wearing_ivory_blouse_cream%E2%80%A6_202606191956.jpeg?w=896&h=1200";
                     document.getElementById('hero-bg-img').src = heroUrl;
                     if(document.getElementById('admin-hero-input')) {
                         document.getElementById('admin-hero-input').value = heroUrl;
