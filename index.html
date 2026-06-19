@@ -475,6 +475,14 @@
         // Hardcoded Google Sheets URL
         const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyYNmfekCU7WOf6N_G9pH2jUlcWZ4dtkchw7m2ctivlB9Nn4S6ReZeo2h0koomtks6fFA/exec";
         
+        // 2. Initial Data (Fallback)
+        const initialSeedData = [
+            { id: 1, name: "تيشيرت أوفر سايز بطبعة جرافيك", price: 350, oldPrice: null, images: ["https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", ""], availableColors: ["أسود", "أبيض"], availableSizes: ["M", "L", "XL"], description: "تيشيرت قطن 100% مريح.", isSoldOut: false },
+            { id: 2, name: "بنطلون كارجو بجيوب متعددة", price: 550, oldPrice: 650, images: ["https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", "", ""], availableColors: ["زيتي", "بيج"], availableSizes: ["S", "M", "L"], description: "بنطلون كارجو عملي.", isSoldOut: false },
+            { id: 3, name: "كروب توب مضلع", price: 250, oldPrice: null, images: ["https://images.unsplash.com/photo-1503342394128-c104d54dba01?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", "", ""], availableColors: ["أبيض"], availableSizes: ["S", "M"], description: "كروب توب بيزك.", isSoldOut: false },
+            { id: 4, name: "جاكيت جينز كلاسيك", price: 850, oldPrice: 990, images: ["https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", "", ""], availableColors: ["أزرق غامق"], availableSizes: ["M", "L", "XL"], description: "جاكيت جينز كلاسيكي.", isSoldOut: true }
+        ];
+
         let products = [];
         let cart = [];
         let currentProduct = null;
@@ -531,22 +539,15 @@
 
             const productsRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
             onSnapshot(productsRef, async (snapshot) => {
-                let liveProducts = [];
-                
-                // لو الداتا بيز مش فاضية، هات المنتجات اللي فيها
-                if (!snapshot.empty) {
-                    snapshot.forEach(doc => liveProducts.push(doc.data()));
-                }
-                
-                // ترتيب المنتجات من الأحدث للأقدم وعرضها
-                products = liveProducts.sort((a,b) => b.id - a.id); 
-                finishLoadingProducts();
-                
-            }, (error) => {
-                console.error("Products Sync Error", error);
-                // لو حصل مشكلة في النت، متعملش حاجة واعرض الموقع زي ما هو
-                finishLoadingProducts();
-            });
+                if (snapshot.empty) {
+                    try {
+                        for (const p of initialSeedData) {
+                            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', String(p.id)), p);
+                        }
+                    } catch(e) {
+                        console.warn("Using Local DB");
+                        products = JSON.parse(JSON.stringify(initialSeedData));
+                        finishLoadingProducts();
                     }
                 } else {
                     let liveProducts = [];
